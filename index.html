@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RBI Regulatory Alerts</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .card {
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(0, 128, 255, 0.12);
+      color: #4da6ff;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(77, 166, 255, 0.25);
+      margin-bottom: 16px;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: #7a7f96;
+      margin-bottom: 32px;
+      line-height: 1.5;
+    }
+
+    .steps {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .step-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2a2d3a;
+      transition: background 0.3s;
+    }
+
+    .step-dot.active { background: #4da6ff; }
+    .step-dot.done   { background: #22c55e; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      background: #0f1117;
+      border: 1px solid #2a2d3a;
+      border-radius: 8px;
+      color: #e8eaf0;
+      font-size: 15px;
+      padding: 12px 14px;
+      outline: none;
+      transition: border-color 0.2s;
+      margin-bottom: 18px;
+    }
+
+    input:focus { border-color: #4da6ff; }
+    input::placeholder { color: #3d4155; }
+
+    .btn {
+      width: 100%;
+      padding: 13px;
+      border-radius: 8px;
+      border: none;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .btn-primary {
+      background: #4da6ff;
+      color: #ffffff;
+    }
+
+    .btn-whatsapp {
+      background: #25D366;
+      color: #ffffff;
+    }
+
+    .error {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #f87171;
+      font-size: 13px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    /* Activation screen */
+    .activation-info {
+      background: #0f1117;
+      border: 1px solid #2a2d3a;
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+
+    .activation-info p {
+      font-size: 13px;
+      color: #7a7f96;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .join-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .step-num {
+      background: #2a2d3a;
+      color: #4da6ff;
+      font-size: 11px;
+      font-weight: 700;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .join-step span {
+      font-size: 13px;
+      color: #9ca3af;
+      line-height: 1.5;
+    }
+
+    .join-code {
+      display: inline-block;
+      background: #1a1d27;
+      border: 1px solid #2a2d3a;
+      color: #4da6ff;
+      font-family: monospace;
+      font-size: 14px;
+      padding: 3px 8px;
+      border-radius: 5px;
+      font-weight: 600;
+    }
+
+    /* Done screen */
+    .check-icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(34, 197, 94, 0.12);
+      border: 2px solid rgba(34, 197, 94, 0.3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 24px;
+    }
+
+    .done-title {
+      text-align: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .done-sub {
+      text-align: center;
+      font-size: 14px;
+      color: #7a7f96;
+      line-height: 1.5;
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #3d4155;
+      text-align: center;
+    }
+
+    .screen { display: none; }
+    .screen.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="steps">
+    <div class="step-dot active" id="dot1"></div>
+    <div class="step-dot" id="dot2"></div>
+    <div class="step-dot" id="dot3"></div>
+  </div>
+
+  <!-- SCREEN 1: Subscribe form -->
+  <div class="screen active" id="screen-form">
+    <div class="badge">RBI Regulatory Alerts</div>
+    <h1>Never miss an RBI circular again.</h1>
+    <p class="subtitle">Get instant WhatsApp notifications with AI-written summaries every time RBI publishes new guidelines.</p>
+
+    <div class="error" id="error-msg"></div>
+
+    <label for="name">Your name</label>
+    <input type="text" id="name" placeholder="Aryan Patil" autocomplete="name" />
+
+    <label for="whatsapp">WhatsApp number</label>
+    <input type="tel" id="whatsapp" placeholder="+919876543210" autocomplete="tel" />
+
+    <button class="btn btn-primary" id="subscribe-btn" onclick="handleSubscribe()">
+      Subscribe for free
+    </button>
+  </div>
+
+  <!-- SCREEN 2: WhatsApp activation -->
+  <div class="screen" id="screen-activate">
+    <div class="badge">One last step</div>
+    <h1>Activate WhatsApp alerts</h1>
+    <p class="subtitle">You need to send a one-time message to enable WhatsApp notifications.</p>
+
+    <div class="activation-info">
+      <div class="join-step">
+        <div class="step-num">1</div>
+        <span>Save this number on WhatsApp:<br/><strong style="color:#e8eaf0">+1 415 523 8886</strong></span>
+      </div>
+      <div class="join-step">
+        <div class="step-num">2</div>
+        <span>Send this exact message to that number:<br/><span class="join-code" id="join-code-display">join apple-mango</span></span>
+      </div>
+      <div class="join-step">
+        <div class="step-num">3</div>
+        <span>Or just tap the button below — it opens WhatsApp with everything pre-filled.</span>
+      </div>
+    </div>
+
+    <button class="btn btn-whatsapp" id="wa-btn" onclick="openWhatsApp()">
+      Open WhatsApp &amp; Send
+    </button>
+    <br/><br/>
+    <button class="btn btn-primary" onclick="showDone()">
+      I've already sent it
+    </button>
+  </div>
+
+  <!-- SCREEN 3: Done -->
+  <div class="screen" id="screen-done">
+    <div class="check-icon">✓</div>
+    <div class="done-title">You're all set!</div>
+    <p class="done-sub">
+      You'll receive WhatsApp notifications with AI summaries the moment RBI publishes new circulars or guidelines.
+    </p>
+  </div>
+</div>
+
+<footer>Powered by Claude AI &middot; RBI circular data from rbi.org.in</footer>
+
+<script>
+  // ── CONFIG — update these before deploying ──────────────────────────────
+  const API_BASE   = "https://your-app.up.railway.app"; // your Railway URL
+  const JOIN_CODE  = "join apple-mango";                // your Twilio join code
+  const TWILIO_NUM = "+14155238886";                    // Twilio sandbox number
+  // ────────────────────────────────────────────────────────────────────────
+
+  document.getElementById("join-code-display").textContent = JOIN_CODE;
+
+  function setDots(step) {
+    const states = { 1: ["active","",""], 2: ["done","active",""], 3: ["done","done","active"] };
+    const s = states[step];
+    ["dot1","dot2","dot3"].forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.className = "step-dot" + (s[i] ? " " + s[i] : "");
+    });
+  }
+
+  function showScreen(id, step) {
+    document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+    document.getElementById(id).classList.add("active");
+    setDots(step);
+  }
+
+  function showError(msg) {
+    const el = document.getElementById("error-msg");
+    el.textContent = msg;
+    el.style.display = "block";
+  }
+
+  function hideError() {
+    document.getElementById("error-msg").style.display = "none";
+  }
+
+  async function handleSubscribe() {
+    hideError();
+    const name     = document.getElementById("name").value.trim();
+    const whatsapp = document.getElementById("whatsapp").value.trim();
+
+    if (!name)     return showError("Please enter your name.");
+    if (!whatsapp) return showError("Please enter your WhatsApp number.");
+    if (!whatsapp.startsWith("+")) return showError("Include country code, e.g. +919876543210");
+
+    const btn = document.getElementById("subscribe-btn");
+    btn.disabled = true;
+    btn.textContent = "Subscribing...";
+
+    try {
+      const res = await fetch(`${API_BASE}/subscribe`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, whatsapp }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "Something went wrong.");
+      }
+
+      showScreen("screen-activate", 2);
+    } catch (e) {
+      showError(e.message);
+      btn.disabled = false;
+      btn.textContent = "Subscribe for free";
+    }
+  }
+
+  function openWhatsApp() {
+    const encoded = encodeURIComponent(JOIN_CODE);
+    window.open(`https://wa.me/${TWILIO_NUM.replace("+","")}?text=${encoded}`, "_blank");
+  }
+
+  function showDone() {
+    showScreen("screen-done", 3);
+  }
+</script>
+</body>
+</html>
