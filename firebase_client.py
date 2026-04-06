@@ -12,6 +12,9 @@ def get_db():
         if not firebase_admin._apps:
             service_account = os.environ["FIREBASE_SERVICE_ACCOUNT"]
             cred_dict = json.loads(service_account)
+            # Railway sometimes stores \n as literal backslash-n — fix the private key
+            if "private_key" in cred_dict:
+                cred_dict["private_key"] = cred_dict["private_key"].replace("\\n", "\n")
             cred = credentials.Certificate(cred_dict)
             firebase_admin.initialize_app(cred)
         _db = firestore.client()
