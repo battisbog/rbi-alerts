@@ -10,9 +10,14 @@ def get_db():
     global _db
     if _db is None:
         if not firebase_admin._apps:
+            import base64
             service_account = os.environ["FIREBASE_SERVICE_ACCOUNT"]
-            cred_dict = json.loads(service_account)
-            # Railway sometimes stores \n as literal backslash-n — fix the private key
+            # Support both plain JSON and base64-encoded JSON
+            try:
+                cred_dict = json.loads(service_account)
+            except json.JSONDecodeError:
+                cred_dict = json.loads(base64.b64decode(service_account).decode())
+            # Fix private key newlines in case of shell escaping
             if "private_key" in cred_dict:
                 cred_dict["private_key"] = cred_dict["private_key"].replace("\\n", "\n")
             cred = credentials.Certificate(cred_dict)
