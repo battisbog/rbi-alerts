@@ -56,7 +56,7 @@ def fetch_latest_circulars() -> list[dict]:
         if href.startswith("http"):
             url = href
         else:
-            url = "https://www.rbi.org.in" + href
+            url = "https://www.rbi.org.in/" + href.lstrip("/")
 
         # Stable ID from URL
         circular_id = hashlib.md5(url.encode()).hexdigest()
