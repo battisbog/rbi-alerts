@@ -14,12 +14,9 @@ def send_whatsapp(to_number: str, circular: dict):
     to = to_number if to_number.startswith("whatsapp:") else f"whatsapp:{to_number}"
 
     body = (
-        f"🔔 *New RBI Circular*\n\n"
-        f"*{circular['title']}*\n"
-        f"📅 {circular.get('date', '')}\n\n"
-        f"{circular.get('summary', 'No summary available.')}\n\n"
-        f"🔗 Read full: {circular['url']}\n\n"
-        f"_RBI Regulatory Alerts_"
+        f"RBI REGULATORY ALERT\n\n"
+        f"{circular.get('summary', 'Summary not available. Please read the circular directly.')}\n\n"
+        f"Read full circular: {circular['url']}"
     )
 
     try:
