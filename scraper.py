@@ -52,11 +52,12 @@ def fetch_latest_circulars() -> list[dict]:
         if not href or not title:
             continue
 
-        # Build absolute URL
+        # Build absolute URL — preserve /Scripts/ base path for relative hrefs
         if href.startswith("http"):
             url = href
         else:
-            url = "https://www.rbi.org.in/" + href.lstrip("/")
+            from urllib.parse import urljoin
+            url = urljoin(RBI_URL, href)
 
         # Stable ID from URL
         circular_id = hashlib.md5(url.encode()).hexdigest()
@@ -75,13 +76,53 @@ def fetch_latest_circulars() -> list[dict]:
 
 
 def extract_pdf_text(url: str) -> str:
-    """Download PDF and extract text. Falls back to OCR if needed."""
+    """Fetch URL, find PDF link if HTML, extract text from PDF."""
+    from bs4 import BeautifulSoup
+    from urllib.parse import urljoin
+
     try:
         resp = httpx.get(url, headers=HEADERS, timeout=60, follow_redirects=True)
         resp.raise_for_status()
 
+        content_type = resp.headers.get("content-type", "")
+
+        # If HTML page, look for a PDF link inside it
+        if "html" in content_type or resp.content[:4] != b"%PDF":
+            soup = BeautifulSoup(resp.text, "html.parser")
+            pdf_link = None
+            for a in soup.find_all("a", href=True):
+                href = a["href"]
+                if href.lower().endswith(".pdf") or "pdf" in href.lower():
+                    pdf_link = urljoin(url, href)
+                    break
+
+            if pdf_link:
+                print(f"[scraper] Found PDF link: {pdf_link}")
+                return _download_and_extract_pdf(pdf_link)
+            else:
+                # No PDF found — extract text directly from HTML
+                for tag in soup(["script", "style", "nav", "header", "footer"]):
+                    tag.decompose()
+                text = soup.get_text(separator="\n", strip=True)
+                return text[:8000]
+
+        return _download_and_extract_pdf(url, content=resp.content)
+
+    except Exception as e:
+        print(f"[scraper] Extraction failed for {url}: {e}")
+        return ""
+
+
+def _download_and_extract_pdf(url: str, content: bytes = None) -> str:
+    """Extract text from a PDF URL or bytes."""
+    try:
+        if content is None:
+            resp = httpx.get(url, headers=HEADERS, timeout=60, follow_redirects=True)
+            resp.raise_for_status()
+            content = resp.content
+
         with tempfile.NamedTemporaryFile(suffix=".pdf", delete=False) as f:
-            f.write(resp.content)
+            f.write(content)
             tmp_path = f.name
 
         text = ""
@@ -91,7 +132,6 @@ def extract_pdf_text(url: str) -> str:
                 if page_text:
                     text += page_text + "\n"
 
-        # If pdfplumber returned almost nothing, try OCR
         if len(text.strip()) < 100:
             text = _ocr_pdf(tmp_path)
 
