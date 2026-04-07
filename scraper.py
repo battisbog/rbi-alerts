@@ -175,7 +175,7 @@ Summary:
 - [Point 4]
 - [Point 5]
 
-The Summary section must be 8-10 lines total. Each bullet point is one concise sentence. Cover what changed, who is affected, key restrictions, and any deadlines or actions required.
+The entire message including all fields must fit in 400 characters or less. Keep every line extremely short. Summary should have 3-4 bullet points, each under 60 characters. Be telegraphic — cut every unnecessary word.
 
 Circular title: {title}
 
