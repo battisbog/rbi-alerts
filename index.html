@@ -7,23 +7,30 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+    html {
+      overflow-x: hidden;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       background: #0f1117;
       color: #e8eaf0;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 24px;
+      padding: 16px;
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+      overflow-x: hidden;
     }
 
     .card {
       background: #1a1d27;
       border: 1px solid #2a2d3a;
       border-radius: 16px;
-      padding: 40px;
+      padding: 28px 24px;
       width: 100%;
       max-width: 420px;
     }
@@ -43,7 +50,7 @@
     }
 
     h1 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.3;
@@ -53,14 +60,14 @@
     .subtitle {
       font-size: 14px;
       color: #7a7f96;
-      margin-bottom: 32px;
+      margin-bottom: 28px;
       line-height: 1.5;
     }
 
     .steps {
       display: flex;
       gap: 8px;
-      margin-bottom: 28px;
+      margin-bottom: 24px;
     }
 
     .step-dot {
@@ -88,11 +95,12 @@
       border: 1px solid #2a2d3a;
       border-radius: 8px;
       color: #e8eaf0;
-      font-size: 15px;
-      padding: 12px 14px;
+      font-size: 16px;
+      padding: 13px 14px;
       outline: none;
       transition: border-color 0.2s;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
+      -webkit-appearance: none;
     }
 
     input:focus { border-color: #4da6ff; }
@@ -100,13 +108,15 @@
 
     .btn {
       width: 100%;
-      padding: 13px;
+      padding: 15px;
       border-radius: 8px;
       border: none;
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       cursor: pointer;
       transition: opacity 0.2s, transform 0.1s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
 
     .btn:active { transform: scale(0.98); }
@@ -120,6 +130,13 @@
     .btn-whatsapp {
       background: #25D366;
       color: #ffffff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #7a7f96;
+      border: 1px solid #2a2d3a;
+      margin-top: 10px;
     }
 
     .error {
@@ -138,8 +155,8 @@
       background: #0f1117;
       border: 1px solid #2a2d3a;
       border-radius: 10px;
-      padding: 18px;
-      margin-bottom: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
     }
 
     .activation-info p {
@@ -219,7 +236,7 @@
     }
 
     footer {
-      margin-top: 24px;
+      margin-top: 20px;
       font-size: 12px;
       color: #3d4155;
       text-align: center;
@@ -281,8 +298,7 @@
     <button class="btn btn-whatsapp" id="wa-btn" onclick="openWhatsApp()">
       Open WhatsApp &amp; Send
     </button>
-    <br/><br/>
-    <button class="btn btn-primary" onclick="showDone()">
+    <button class="btn btn-secondary" onclick="showDone()">
       I've already sent it
     </button>
   </div>
