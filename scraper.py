@@ -160,22 +160,20 @@ def summarize_circular(title: str, text: str) -> str:
     if not text:
         return "Full text could not be extracted. Please read the circular directly."
 
-    prompt = f"""You are a regulatory compliance assistant for Indian banks. Summarize the RBI circular below. No emojis, no markdown, no bold text. Plain text only.
+    prompt = f"""You are a regulatory compliance assistant for Indian banks. Summarize the RBI circular below. No emojis, no markdown, no bold text. Plain text only. Be concise.
 
 Use exactly this structure:
 
 Circular: [Circular number and date]
 Applicable From: [Effective date]
-Applicable To: [Who it applies to]
+Applicable To: [Who it applies to — keep it short]
 
 Summary:
-- [Point 1]
-- [Point 2]
-- [Point 3]
-- [Point 4]
-- [Point 5]
+- [Point 1 — one short sentence]
+- [Point 2 — one short sentence]
+- [Point 3 — one short sentence]
 
-The entire message including all fields must fit in 400 characters or less. Keep every line extremely short. Summary should have 3-4 bullet points, each under 60 characters. Be telegraphic — cut every unnecessary word.
+Maximum 3-4 bullet points. Each bullet must be one short, direct sentence. No elaboration.
 
 Circular title: {title}
 
