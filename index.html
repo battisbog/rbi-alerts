@@ -7,174 +7,175 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      overflow-x: hidden;
-    }
+    html { overflow-x: hidden; }
 
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f1117;
-      color: #e8eaf0;
+      background: #0a0a0f;
+      color: #e2e4ed;
       min-height: 100vh;
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 16px;
-      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+      padding: 20px 16px;
+      padding-bottom: calc(20px + env(safe-area-inset-bottom));
       overflow-x: hidden;
     }
 
-    .card {
-      background: #1a1d27;
-      border: 1px solid #2a2d3a;
-      border-radius: 16px;
-      padding: 28px 24px;
-      width: 100%;
-      max-width: 420px;
+    /* Progress bar at top of card */
+    .progress-bar {
+      height: 3px;
+      background: #1e2030;
+      border-radius: 3px 3px 0 0;
+      overflow: hidden;
     }
 
-    .badge {
-      display: inline-block;
-      background: rgba(0, 128, 255, 0.12);
-      color: #4da6ff;
-      font-size: 11px;
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #4da6ff, #7c6bff);
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .card {
+      background: #13141f;
+      border: 1px solid #1e2030;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 400px;
+      overflow: hidden;
+      box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    }
+
+    .card-body {
+      padding: 28px 24px 32px;
+    }
+
+    .app-name {
+      font-size: 12px;
       font-weight: 600;
-      letter-spacing: 0.08em;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(77, 166, 255, 0.25);
-      margin-bottom: 16px;
+      color: #4da6ff;
+      margin-bottom: 20px;
     }
 
     h1 {
-      font-size: 20px;
+      font-size: 22px;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.3;
       margin-bottom: 8px;
+      letter-spacing: -0.3px;
     }
 
     .subtitle {
       font-size: 14px;
-      color: #7a7f96;
+      color: #6b7080;
       margin-bottom: 28px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
-
-    .steps {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-
-    .step-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #2a2d3a;
-      transition: background 0.3s;
-    }
-
-    .step-dot.active { background: #4da6ff; }
-    .step-dot.done   { background: #22c55e; }
 
     label {
       display: block;
       font-size: 13px;
       font-weight: 500;
-      color: #9ca3af;
-      margin-bottom: 6px;
+      color: #8b90a0;
+      margin-bottom: 7px;
     }
 
     input {
       width: 100%;
-      background: #0f1117;
-      border: 1px solid #2a2d3a;
-      border-radius: 8px;
-      color: #e8eaf0;
+      background: #0d0e17;
+      border: 1px solid #1e2030;
+      border-radius: 10px;
+      color: #e2e4ed;
       font-size: 16px;
       padding: 13px 14px;
       outline: none;
-      transition: border-color 0.2s;
+      transition: border-color 0.15s, box-shadow 0.15s;
       margin-bottom: 16px;
       -webkit-appearance: none;
     }
 
-    input:focus { border-color: #4da6ff; }
-    input::placeholder { color: #3d4155; }
+    input:focus {
+      border-color: #4da6ff;
+      box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.12);
+    }
+
+    input::placeholder { color: #2e3245; }
 
     .btn {
       width: 100%;
       padding: 15px;
-      border-radius: 8px;
+      border-radius: 10px;
       border: none;
-      font-size: 16px;
+      font-size: 15px;
       font-weight: 600;
       cursor: pointer;
-      transition: opacity 0.2s, transform 0.1s;
+      transition: opacity 0.15s, transform 0.1s;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
+      letter-spacing: 0.01em;
     }
 
-    .btn:active { transform: scale(0.98); }
-    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .btn:active { transform: scale(0.985); opacity: 0.9; }
+    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .btn-primary {
-      background: #4da6ff;
+      background: linear-gradient(135deg, #4da6ff 0%, #6b7bff 100%);
       color: #ffffff;
+      box-shadow: 0 4px 16px rgba(77, 166, 255, 0.25);
     }
 
     .btn-whatsapp {
       background: #25D366;
       color: #ffffff;
+      box-shadow: 0 4px 16px rgba(37, 211, 102, 0.2);
     }
 
-    .btn-secondary {
+    .btn-ghost {
       background: transparent;
-      color: #7a7f96;
-      border: 1px solid #2a2d3a;
+      color: #6b7080;
+      border: 1px solid #1e2030;
       margin-top: 10px;
+      box-shadow: none;
     }
 
     .error {
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.08);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       color: #f87171;
       font-size: 13px;
       padding: 10px 14px;
       border-radius: 8px;
       margin-bottom: 16px;
       display: none;
+      line-height: 1.4;
     }
 
     /* Activation screen */
     .activation-info {
-      background: #0f1117;
-      border: 1px solid #2a2d3a;
+      background: #0d0e17;
+      border: 1px solid #1e2030;
       border-radius: 10px;
       padding: 16px;
-      margin-bottom: 16px;
-    }
-
-    .activation-info p {
-      font-size: 13px;
-      color: #7a7f96;
-      margin-bottom: 12px;
-      line-height: 1.5;
+      margin-bottom: 18px;
     }
 
     .join-step {
       display: flex;
       align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
+    .join-step:last-child { margin-bottom: 0; }
+
     .step-num {
-      background: #2a2d3a;
+      background: #1e2030;
       color: #4da6ff;
       font-size: 11px;
       font-weight: 700;
@@ -190,55 +191,58 @@
 
     .join-step span {
       font-size: 13px;
-      color: #9ca3af;
-      line-height: 1.5;
+      color: #8b90a0;
+      line-height: 1.6;
     }
+
+    .join-step strong { color: #c8cad6; font-weight: 500; }
 
     .join-code {
       display: inline-block;
-      background: #1a1d27;
-      border: 1px solid #2a2d3a;
+      background: #13141f;
+      border: 1px solid #2a2d45;
       color: #4da6ff;
-      font-family: monospace;
-      font-size: 14px;
-      padding: 3px 8px;
+      font-family: "SF Mono", "Fira Code", monospace;
+      font-size: 13px;
+      padding: 2px 8px;
       border-radius: 5px;
       font-weight: 600;
     }
 
     /* Done screen */
     .check-icon {
-      width: 56px;
-      height: 56px;
-      background: rgba(34, 197, 94, 0.12);
-      border: 2px solid rgba(34, 197, 94, 0.3);
+      width: 52px;
+      height: 52px;
+      background: rgba(34, 197, 94, 0.1);
+      border: 1.5px solid rgba(34, 197, 94, 0.25);
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       margin: 0 auto 20px;
-      font-size: 24px;
+      font-size: 22px;
     }
 
     .done-title {
       text-align: center;
-      font-size: 18px;
+      font-size: 20px;
       font-weight: 700;
       color: #ffffff;
       margin-bottom: 8px;
+      letter-spacing: -0.3px;
     }
 
     .done-sub {
       text-align: center;
       font-size: 14px;
-      color: #7a7f96;
-      line-height: 1.5;
+      color: #6b7080;
+      line-height: 1.6;
     }
 
     footer {
-      margin-top: 20px;
-      font-size: 12px;
-      color: #3d4155;
+      margin-top: 18px;
+      font-size: 11px;
+      color: #2a2d3a;
       text-align: center;
     }
 
@@ -249,94 +253,86 @@
 <body>
 
 <div class="card">
-  <div class="steps">
-    <div class="step-dot active" id="dot1"></div>
-    <div class="step-dot" id="dot2"></div>
-    <div class="step-dot" id="dot3"></div>
+  <div class="progress-bar">
+    <div class="progress-fill" id="progress-fill" style="width: 33%"></div>
   </div>
+  <div class="card-body">
 
-  <!-- SCREEN 1: Subscribe form -->
-  <div class="screen active" id="screen-form">
-    <div class="badge">RBI Regulatory Alerts</div>
-    <h1>Never miss an RBI circular again.</h1>
-    <p class="subtitle">Get instant WhatsApp notifications with AI-written summaries every time RBI publishes new guidelines.</p>
+    <!-- SCREEN 1: Subscribe form -->
+    <div class="screen active" id="screen-form">
+      <div class="app-name">RBI Regulatory Alerts</div>
+      <h1>Never miss an RBI circular.</h1>
+      <p class="subtitle">Instant WhatsApp notifications with AI summaries every time RBI publishes new guidelines.</p>
 
-    <div class="error" id="error-msg"></div>
+      <div class="error" id="error-msg"></div>
 
-    <label for="name">Your name</label>
-    <input type="text" id="name" placeholder="John Doe" autocomplete="name" />
+      <label for="name">Your name</label>
+      <input type="text" id="name" placeholder="John Doe" autocomplete="name" />
 
-    <label for="whatsapp">WhatsApp number</label>
-    <input type="tel" id="whatsapp" placeholder="+919876543210" autocomplete="tel" />
+      <label for="whatsapp">WhatsApp number</label>
+      <input type="tel" id="whatsapp" placeholder="+91 98765 43210" autocomplete="tel" />
 
-    <button class="btn btn-primary" id="subscribe-btn" onclick="handleSubscribe()">
-      Subscribe for free
-    </button>
-  </div>
-
-  <!-- SCREEN 2: WhatsApp activation -->
-  <div class="screen" id="screen-activate">
-    <div class="badge">One last step</div>
-    <h1>Activate WhatsApp alerts</h1>
-    <p class="subtitle">You need to send a one-time message to enable WhatsApp notifications.</p>
-
-    <div class="activation-info">
-      <div class="join-step">
-        <div class="step-num">1</div>
-        <span>Save this number on WhatsApp:<br/><strong style="color:#e8eaf0">+1 415 523 8886</strong></span>
-      </div>
-      <div class="join-step">
-        <div class="step-num">2</div>
-        <span>Send this exact message to that number:<br/><span class="join-code" id="join-code-display">join apple-mango</span></span>
-      </div>
-      <div class="join-step">
-        <div class="step-num">3</div>
-        <span>Or just tap the button below — it opens WhatsApp with everything pre-filled.</span>
-      </div>
+      <button class="btn btn-primary" id="subscribe-btn" onclick="handleSubscribe()">
+        Subscribe for free
+      </button>
     </div>
 
-    <button class="btn btn-whatsapp" id="wa-btn" onclick="openWhatsApp()">
-      Open WhatsApp &amp; Send
-    </button>
-    <button class="btn btn-secondary" onclick="showDone()">
-      I've already sent it
-    </button>
-  </div>
+    <!-- SCREEN 2: WhatsApp activation -->
+    <div class="screen" id="screen-activate">
+      <div class="app-name">One last step</div>
+      <h1>Activate WhatsApp.</h1>
+      <p class="subtitle">Send a quick message to connect your WhatsApp.</p>
 
-  <!-- SCREEN 3: Done -->
-  <div class="screen" id="screen-done">
-    <div class="check-icon">✓</div>
-    <div class="done-title">You're all set!</div>
-    <p class="done-sub">
-      You'll receive WhatsApp notifications with AI summaries the moment RBI publishes new circulars or guidelines.
-    </p>
+      <div class="activation-info">
+        <div class="join-step">
+          <div class="step-num">1</div>
+          <span>Save this number: <strong>+1 415 523 8886</strong></span>
+        </div>
+        <div class="join-step">
+          <div class="step-num">2</div>
+          <span>Send: <span class="join-code" id="join-code-display">join apple-mango</span></span>
+        </div>
+        <div class="join-step">
+          <div class="step-num">3</div>
+          <span>Or tap below — WhatsApp opens pre-filled.</span>
+        </div>
+      </div>
+
+      <button class="btn btn-whatsapp" id="wa-btn" onclick="openWhatsApp()">
+        Open WhatsApp &amp; Send
+      </button>
+      <button class="btn btn-ghost" onclick="showDone()">
+        I've already sent it
+      </button>
+    </div>
+
+    <!-- SCREEN 3: Done -->
+    <div class="screen" id="screen-done">
+      <div class="check-icon">✓</div>
+      <div class="done-title">You're all set!</div>
+      <p class="done-sub">You'll get WhatsApp alerts with AI summaries the moment RBI publishes new circulars.</p>
+    </div>
+
   </div>
 </div>
 
-<footer>RBI circular data from rbi.org.in</footer>
+<footer>Data sourced from rbi.org.in</footer>
 
 <script>
-  // ── CONFIG — update these before deploying ──────────────────────────────
   const API_BASE   = "https://genuine-light-production-4342.up.railway.app";
   const JOIN_CODE  = "join goes-cost";
-  const TWILIO_NUM = "+14155238886";                    // Twilio sandbox number
-  // ────────────────────────────────────────────────────────────────────────
+  const TWILIO_NUM = "+14155238886";
 
   document.getElementById("join-code-display").textContent = JOIN_CODE;
 
-  function setDots(step) {
-    const states = { 1: ["active","",""], 2: ["done","active",""], 3: ["done","done","active"] };
-    const s = states[step];
-    ["dot1","dot2","dot3"].forEach((id, i) => {
-      const el = document.getElementById(id);
-      el.className = "step-dot" + (s[i] ? " " + s[i] : "");
-    });
+  function setProgress(pct) {
+    document.getElementById("progress-fill").style.width = pct + "%";
   }
 
-  function showScreen(id, step) {
+  function showScreen(id, pct) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById(id).classList.add("active");
-    setDots(step);
+    setProgress(pct);
   }
 
   function showError(msg) {
@@ -374,7 +370,7 @@
         throw new Error(data.detail || "Something went wrong.");
       }
 
-      showScreen("screen-activate", 2);
+      showScreen("screen-activate", 66);
     } catch (e) {
       showError(e.message);
       btn.disabled = false;
@@ -388,7 +384,7 @@
   }
 
   function showDone() {
-    showScreen("screen-done", 3);
+    showScreen("screen-done", 100);
   }
 </script>
 </body>
