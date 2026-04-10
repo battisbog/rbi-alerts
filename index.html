@@ -100,6 +100,13 @@
       -webkit-appearance: none;
     }
 
+    input:-webkit-autofill,
+    input:-webkit-autofill:focus {
+      -webkit-box-shadow: 0 0 0 1000px #0d0e17 inset;
+      -webkit-text-fill-color: #e2e4ed;
+      caret-color: #e2e4ed;
+    }
+
     input:focus {
       border-color: #4da6ff;
       box-shadow: 0 0 0 3px rgba(77, 166, 255, 0.12);
@@ -358,12 +365,22 @@
     btn.disabled = true;
     btn.textContent = "Subscribing...";
 
+    const doFetch = () => fetch(`${API_BASE}/subscribe`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, whatsapp }),
+    });
+
     try {
-      const res = await fetch(`${API_BASE}/subscribe`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, whatsapp }),
-      });
+      let res;
+      try {
+        res = await doFetch();
+      } catch {
+        // First attempt failed (cold start / network blip) — retry once
+        btn.textContent = "Retrying...";
+        await new Promise(r => setTimeout(r, 2000));
+        res = await doFetch();
+      }
 
       if (!res.ok) {
         const data = await res.json();
@@ -372,7 +389,7 @@
 
       showScreen("screen-activate", 66);
     } catch (e) {
-      showError(e.message);
+      showError("Connection failed. Please check your network and try again.");
       btn.disabled = false;
       btn.textContent = "Subscribe for free";
     }
