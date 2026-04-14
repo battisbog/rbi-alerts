@@ -1,4 +1,5 @@
 import os
+import json
 from twilio.rest import Client as TwilioClient
 
 twilio = TwilioClient(
@@ -13,17 +14,15 @@ def send_whatsapp(to_number: str, circular: dict):
     # Ensure number has whatsapp: prefix
     to = to_number if to_number.startswith("whatsapp:") else f"whatsapp:{to_number}"
 
-    body = (
-        f"RBI REGULATORY ALERT\n\n"
-        f"{circular.get('summary', 'Summary not available. Please read the circular directly.')}\n\n"
-        f"Read full circular: {circular['url']}"
-    )
-
     try:
         message = twilio.messages.create(
             from_=WHATSAPP_FROM,
             to=to,
-            body=body,
+            content_sid="HX4c778e89d150316d1fad12ad0d9d453f",
+            content_variables=json.dumps({
+                "1": circular.get("summary", "Summary not available."),
+                "2": circular["url"]
+            }),
         )
         print(f"[notifier] WhatsApp sent to {to_number} — SID: {message.sid}")
     except Exception as e:
